@@ -22,6 +22,15 @@ inputs:
     description: Path to manifest.json to copy into dist before upload. Skipped if empty or missing.
     required: false
     default: 'docs/manifest.json'
+  site_base_url:
+    description: Public base URL for the deployed site (no trailing slash).
+    required: false
+    default: 'https://docs.avagate.dev'
+
+outputs:
+  site_url:
+    description: Public URL of the deployed site.
+    value: ${{ steps.site_url.outputs.site_url }}
 
 runs:
   using: composite
@@ -78,3 +87,16 @@ runs:
         gcloud storage rsync "$DIST_PATH" "gs://${BUCKET}/sites/${FOLDER}" \
           --recursive \
           --delete-unmatched-destination-objects
+
+    - name: Report site URL
+      id: site_url
+      shell: bash
+      run: |
+        set -euo pipefail
+        BASE="${{ inputs.site_base_url }}"
+        BASE="${BASE%/}"
+        SITE_URL="${BASE}/${FOLDER}/"
+        echo "site_url=${SITE_URL}" >> "$GITHUB_OUTPUT"
+        echo "Deployed site: ${SITE_URL}"
+        echo "## Deployed site" >> "$GITHUB_STEP_SUMMARY"
+        echo "[${SITE_URL}](${SITE_URL})" >> "$GITHUB_STEP_SUMMARY"

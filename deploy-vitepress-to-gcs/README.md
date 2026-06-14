@@ -38,6 +38,19 @@ All inputs are optional.
 - **`build_command`** — Default: `pnpm docs:build`.
 - **`dist_path`** — Built site output directory. Default: `docs/.vitepress/dist`.
 - **`manifest_path`** — Source path for `manifest.json` copied into `dist_path` before upload. Default: `docs/manifest.json`. The copy step is skipped when this input is empty or the file does not exist.
+- **`site_base_url`** — Public base URL for the deployed site (no trailing slash). Default: `https://docs.avagate.dev`.
+
+## Outputs
+
+- **`site_url`** — Public URL of the deployed site, e.g. `https://docs.avagate.dev/coreauth/`. Also written to the job summary and logs.
+
+```yaml
+- uses: avagate/actions/deploy-vitepress-to-gcs@v1
+  id: docs
+  env:
+    GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+- run: echo "Live at ${{ steps.docs.outputs.site_url }}"
+```
 
 ## Deploy target
 
