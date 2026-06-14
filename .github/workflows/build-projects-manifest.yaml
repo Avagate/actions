@@ -1,0 +1,27 @@
+name: Build projects manifest
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - build-projects-manifest/**
+      - .github/workflows/build-projects-manifest.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-projects-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build projects.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and upload projects.json
+        uses: ./build-projects-manifest
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}

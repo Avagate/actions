@@ -18,7 +18,7 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 ```
 
-No checkout step is required — the action bundles its own script and only reads from GCS.
+No checkout step is required — the action bundles its own script, reads per-site manifests from GCS, and merges bundled external entries from `custom-manifests.json`.
 
 ## Required environment variable
 
@@ -39,10 +39,28 @@ All inputs are optional.
 The action:
 
 1. Lists `gs://<gcs_bucket>/sites/*/manifest.json` in GCS.
-2. Reads each manifest, validates that it is an object with a non-empty `name`, and normalizes optional `description`, `icon`, and `link` fields.
-3. Sorts entries by `name` and uploads the result to `gs://<gcs_bucket>/sites/projects.json`.
+2. Reads each manifest, validates that it is an object with a non-empty `name`, and normalizes optional `description`, `icon`, and `link` fields (default `link`: `{site_base_url}/{folder}/`).
+3. Merges entries from the bundled [`custom-manifests.json`](custom-manifests.json) for external projects not deployed to GCS. Each custom entry must include `name` and `link`; `description` and `icon` are optional. When a custom entry has the same `name` as a GCS manifest, the GCS entry wins and the custom entry is skipped.
+4. Sorts entries by `name` and uploads the result to `gs://<gcs_bucket>/sites/projects.json`.
 
 Invalid or unreadable manifests are skipped with a warning; the job continues.
+
+## External projects (`custom-manifests.json`)
+
+External docs sites (not deployed via the private docs repo) are listed in [`custom-manifests.json`](custom-manifests.json) in this action. The file is a JSON array of manifest objects shipped with each action release.
+
+Example entry:
+
+```json
+{
+  "name": "External Docs",
+  "description": "Optional short description",
+  "icon": "https://example.com/icon.svg",
+  "link": "https://example.com/docs/"
+}
+```
+
+To add an external project, edit and commit `custom-manifests.json` in `avagate/actions` and release a new action version.
 
 ## Example with overrides
 
