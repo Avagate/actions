@@ -37,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build and upload projects.json
-        uses: avagate/actions/build-projects-manifest@v1
+        uses: avagate/actions/build-projects-manifest@v2
         # with:
         #   gcs_bucket: docs-avagate-dev
         #   site_base_url: https://docs.avagate.dev

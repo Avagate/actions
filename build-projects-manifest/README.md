@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: avagate/actions/build-projects-manifest@v1
+      - uses: avagate/actions/build-projects-manifest@v2
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 ```
@@ -47,7 +47,7 @@ Invalid or unreadable manifests are skipped with a warning; the job continues.
 ## Example with overrides
 
 ```yaml
-- uses: avagate/actions/build-projects-manifest@v1
+- uses: avagate/actions/build-projects-manifest@v2
   with:
     gcs_bucket: docs-staging-avagate-dev
     site_base_url: https://docs-staging.avagate.dev
@@ -58,4 +58,4 @@ Invalid or unreadable manifests are skipped with a warning; the job continues.
 
 ## Versioning
 
-Pin to an immutable release ref, e.g. `avagate/actions/build-projects-manifest@v1`. Tag new major versions (`v2`, …) for breaking changes; prefer new tags over moving an existing tag.
+Pin to an immutable release ref, e.g. `avagate/actions/build-projects-manifest@v2`. Tag new major versions (`v3`, …) for breaking changes; prefer new tags over moving an existing tag.
