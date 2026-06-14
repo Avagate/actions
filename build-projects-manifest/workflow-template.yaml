@@ -1,0 +1,46 @@
+# Copy this file to .github/workflows/build-projects.yaml in your repository.
+#
+# Builds and uploads sites/projects.json via avagate/actions/build-projects-manifest.
+#
+# Required repository setup:
+#   - `GCP_SA_KEY` — JSON key for a service account with read access to
+#     gs://<bucket>/sites/*/manifest.json and write access to
+#     gs://<bucket>/sites/projects.json (default bucket: docs-avagate-dev).
+#
+# Default target (no action inputs):
+#   reads  gs://docs-avagate-dev/sites/*/manifest.json
+#   writes gs://docs-avagate-dev/sites/projects.json
+#
+# Override gcs_bucket or site_base_url for non-default environments.
+#
+# Manual run from the repo root:
+#
+#   gh workflow run build-projects.yaml
+
+name: Build projects manifest
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-projects-${{ github.repository }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build projects.json
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and upload projects.json
+        uses: avagate/actions/build-projects-manifest@v1
+        # with:
+        #   gcs_bucket: docs-avagate-dev
+        #   site_base_url: https://docs.avagate.dev
+        #   cache_control: max-age=300
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}

@@ -1,0 +1,44 @@
+name: Build projects manifest
+description: Aggregate per-site manifest.json files from GCS into sites/projects.json.
+
+inputs:
+  gcs_bucket:
+    description: GCS bucket name (without gs://). Defaults to docs-avagate-dev when empty.
+    required: false
+    default: ''
+  site_base_url:
+    description: Public base URL for the docs portal (no trailing slash). Used for default project links.
+    required: false
+    default: 'https://docs.avagate.dev'
+  cache_control:
+    description: Cache-Control header for the uploaded projects.json.
+    required: false
+    default: 'max-age=300'
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve GCS bucket
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [[ -n "${{ inputs.gcs_bucket }}" ]]; then
+          echo "GCS_BUCKET=${{ inputs.gcs_bucket }}" >> "$GITHUB_ENV"
+        else
+          echo "GCS_BUCKET=docs-avagate-dev" >> "$GITHUB_ENV"
+        fi
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ env.GCP_SA_KEY }}
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Build and upload projects.json
+      shell: bash
+      run: bash "${{ github.action_path }}/build-projects-manifest.sh"
+      env:
+        DOCS_BASE: ${{ inputs.site_base_url }}
+        CACHE_CONTROL: ${{ inputs.cache_control }}

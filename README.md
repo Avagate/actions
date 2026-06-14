@@ -5,6 +5,7 @@ Shared, reusable GitHub Actions for Avagate repositories.
 ## Actions
 
 - [`deploy-vitepress-to-gcs`](deploy-vitepress-to-gcs/) — build a VitePress docs site and deploy it to the `docs-avagate-dev` GCS bucket under `sites/<folder>/`.
+- [`build-projects-manifest`](build-projects-manifest/) — aggregate per-site `manifest.json` files from GCS into `sites/projects.json` for the docs portal home page.
 
 Reference an action by path and ref, for example:
 
