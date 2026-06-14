@@ -2,6 +2,10 @@
 
 Composite GitHub Action that builds a VitePress docs site and deploys it to a private GCS bucket under `sites/<folder>/`.
 
+## Quick start
+
+Copy [`workflow-template.yaml`](workflow-template.yaml) to `.github/workflows/docs-deploy.yaml` in your repo, add the `GCP_SA_KEY` repository secret, and customize the `paths:` filters.
+
 ## Usage
 
 ```yaml
@@ -12,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_ref || github.ref }}
-      - uses: avagate/actions/deploy-vitepress-to-gcs@main
+      - uses: avagate/actions/deploy-vitepress-to-gcs@v1
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 ```
@@ -48,7 +52,7 @@ The `sites/` prefix is fixed to match the docs portal bucket layout.
 ## Example with overrides
 
 ```yaml
-- uses: avagate/actions/deploy-vitepress-to-gcs@main
+- uses: avagate/actions/deploy-vitepress-to-gcs@v1
   with:
     gcs_folder: legacy-site-name
     build_command: pnpm --filter docs build
@@ -59,4 +63,4 @@ The `sites/` prefix is fixed to match the docs portal bucket layout.
 
 ## Versioning
 
-This action is referenced with `@main`. To pin to an immutable release, push a tag (e.g. `v1`) and reference `avagate/actions/deploy-vitepress-to-gcs@v1`.
+Pin to an immutable release ref, e.g. `avagate/actions/deploy-vitepress-to-gcs@v1`. Tag new major versions (`v2`, …) for breaking changes; prefer new tags over moving an existing tag.

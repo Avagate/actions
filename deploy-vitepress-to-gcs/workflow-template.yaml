@@ -1,0 +1,65 @@
+# Copy this file to .github/workflows/docs-deploy.yaml in your repository.
+#
+# Deploys a VitePress docs site to GCS via avagate/actions/deploy-vitepress-to-gcs.
+#
+# Required repository setup:
+#   - `GCP_SA_KEY` — JSON key for a service account with object write/delete
+#     access on the target bucket (default: docs-avagate-dev).
+#
+# Default deploy target (no action inputs):
+#   gs://docs-avagate-dev/sites/<repository-name>/
+#
+# Override gcs_folder when the repo name differs from the site slug, or for
+# monorepos. Override gcs_bucket for non-default environments.
+#
+# Manual deploy from the repo root:
+#
+#   gh workflow run docs-deploy.yaml --ref main -f source_ref=main
+#
+# Customize the `paths:` list below so deploys run only when docs-related
+# files change.
+
+name: Docs Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - README.md
+      - docs/**
+      - package.json
+      - pnpm-lock.yaml
+      - .github/workflows/docs-deploy.yaml
+  workflow_dispatch:
+    inputs:
+      source_ref:
+        description: 'Branch, tag, or SHA to build docs from'
+        required: true
+        default: main
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source ref
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.source_ref || github.ref }}
+
+      - name: Build and deploy docs
+        uses: avagate/actions/deploy-vitepress-to-gcs@v1
+        # with:
+        #   gcs_folder: legacy-site-name
+        #   build_command: pnpm --filter docs build
+        #   dist_path: packages/docs/.vitepress/dist
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
