@@ -88,6 +88,12 @@ runs:
           --recursive \
           --delete-unmatched-destination-objects
 
+    - name: Build projects manifest
+      uses: avagate/actions/build-projects-manifest@v2
+      with:
+        gcs_bucket: ${{ inputs.gcs_bucket }}
+        site_base_url: ${{ inputs.site_base_url }}
+
     - name: Report site URL
       id: site_url
       shell: bash

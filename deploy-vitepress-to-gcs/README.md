@@ -1,6 +1,6 @@
 # deploy-vitepress-to-gcs
 
-Composite GitHub Action that builds a VitePress docs site and deploys it to a private GCS bucket under `sites/<folder>/`.
+Composite GitHub Action that builds a VitePress docs site, deploys it to a private GCS bucket under `sites/<folder>/`, and rebuilds `sites/projects.json` for the docs portal home page.
 
 ## Quick start
 
@@ -27,7 +27,7 @@ With no `with:` inputs, a repo named `coreauth` deploys to `gs://docs-avagate-de
 
 Composite actions cannot declare `secrets:`. The caller must pass the GCP service account JSON key via `env`:
 
-- **`GCP_SA_KEY`** — JSON credentials for a service account with write access to the target bucket. Read by the `google-github-actions/auth@v2` step as `credentials_json`.
+- **`GCP_SA_KEY`** — JSON credentials for a service account with write/delete access on the site folder under `gs://<bucket>/sites/<folder>/`, read access to `gs://<bucket>/sites/*/manifest.json`, and write access to `gs://<bucket>/sites/projects.json`. Read by the `google-github-actions/auth@v2` step as `credentials_json`.
 
 ## Inputs
 
@@ -61,6 +61,8 @@ gs://<gcs_bucket>/sites/<gcs_folder>/
 ```
 
 The `sites/` prefix is fixed to match the docs portal bucket layout.
+
+After upload, the action runs [`build-projects-manifest`](../build-projects-manifest/) to aggregate all per-site `manifest.json` files into `gs://<gcs_bucket>/sites/projects.json`.
 
 ## Example with overrides
 
