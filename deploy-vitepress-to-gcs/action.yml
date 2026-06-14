@@ -1,0 +1,80 @@
+name: Deploy VitePress to GCS
+description: Build VitePress docs and rsync them to a GCS bucket sites folder.
+
+inputs:
+  gcs_bucket:
+    description: GCS bucket name (without gs://). Defaults to docs-avagate-dev when empty.
+    required: false
+    default: ''
+  gcs_folder:
+    description: Site folder slug under sites/. Defaults to the repository name when empty.
+    required: false
+    default: ''
+  build_command:
+    description: Command to build the docs site.
+    required: false
+    default: 'pnpm docs:build'
+  dist_path:
+    description: Path to the built docs output directory.
+    required: false
+    default: 'docs/.vitepress/dist'
+  manifest_path:
+    description: Path to manifest.json to copy into dist before upload. Skipped if empty or missing.
+    required: false
+    default: 'docs/manifest.json'
+
+runs:
+  using: composite
+  steps:
+    - name: Resolve GCS bucket and folder
+      shell: bash
+      run: |
+        set -euo pipefail
+        if [[ -n "${{ inputs.gcs_bucket }}" ]]; then
+          echo "BUCKET=${{ inputs.gcs_bucket }}" >> "$GITHUB_ENV"
+        else
+          echo "BUCKET=docs-avagate-dev" >> "$GITHUB_ENV"
+        fi
+        if [[ -n "${{ inputs.gcs_folder }}" ]]; then
+          echo "FOLDER=${{ inputs.gcs_folder }}" >> "$GITHUB_ENV"
+        else
+          echo "FOLDER=${{ github.event.repository.name }}" >> "$GITHUB_ENV"
+        fi
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
+
+    - name: Build docs site
+      shell: bash
+      run: ${{ inputs.build_command }}
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ env.GCP_SA_KEY }}
+
+    - name: Setup gcloud
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Upload docs to GCS
+      shell: bash
+      run: |
+        set -euo pipefail
+        MANIFEST_PATH="${{ inputs.manifest_path }}"
+        DIST_PATH="${{ inputs.dist_path }}"
+        if [[ -n "$MANIFEST_PATH" && -f "$MANIFEST_PATH" ]]; then
+          cp "$MANIFEST_PATH" "$DIST_PATH/manifest.json"
+        fi
+        gcloud storage rsync "$DIST_PATH" "gs://${BUCKET}/sites/${FOLDER}" \
+          --recursive \
+          --delete-unmatched-destination-objects
