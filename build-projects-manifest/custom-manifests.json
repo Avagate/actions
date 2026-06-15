@@ -10,5 +10,11 @@
     "description": "Client library that communicates with the Addtowallet API.",
     "link": "https://basetime.github.io/a2w-api-ts/",
     "icon": "https://cdn.addtowallet.io/img/a2w-api-ts-logo.png"
-  }
+  },
+  {
+    "name": "@basetime/auth-yipee",
+    "description": "Credentials, tokens, and identity projection for the yipee platform.",
+    "icon": "https://cdn.addtowallet.io/img/auth-yipee-logo.png",
+    "link": "https://basetime.github.io/auth-yipee/",
+ }
 ]
