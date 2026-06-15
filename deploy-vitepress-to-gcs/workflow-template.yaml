@@ -57,7 +57,7 @@ jobs:
 
       - name: Build and deploy docs
         id: docs
-        uses: avagate/actions/deploy-vitepress-to-gcs@v1
+        uses: avagate/actions/deploy-vitepress-to-gcs@v4
         # with:
         #   gcs_folder: legacy-site-name
         #   build_command: pnpm --filter docs build

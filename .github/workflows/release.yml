@@ -86,8 +86,8 @@ jobs:
           git add package.json CHANGELOG.md
           git commit -m "chore(changelog): release v${VERSION} [skip ci]"
           git tag -a "v${VERSION}" -m "Release v${VERSION}"
-          # Move the major tag (e.g. v1) to this release so consumers pinned to
-          # @v1 always get the latest compatible version.
+          # Move the major tag (e.g. v4) to this release so consumers pinned to
+          # the major tag always get the latest compatible version.
           git tag -f -a "${MAJOR}" -m "Release ${MAJOR} (v${VERSION})"
           git push origin HEAD:main
           git push origin "v${VERSION}"

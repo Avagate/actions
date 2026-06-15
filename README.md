@@ -10,7 +10,7 @@ Shared, reusable GitHub Actions for Avagate repositories.
 Reference an action by path and ref, for example:
 
 ```yaml
-- uses: avagate/actions/deploy-vitepress-to-gcs@v1
+- uses: avagate/actions/deploy-vitepress-to-gcs@v4
 ```
 
 ## Adopting in a new repo
@@ -24,10 +24,10 @@ By default, a repo named `my-project` deploys to `gs://docs-avagate-dev/sites/my
 
 ## Versioning
 
-Pin consumers to the moving major tag (`@v1`). On each release, the [`Release`](.github/workflows/release.yml) workflow:
+All actions in this repo share a single repo-wide version (one `package.json`, one release). Pin consumers to the moving major tag (`@v4`). On each release, the [`Release`](.github/workflows/release.yml) workflow:
 
 1. Bumps `version` in `package.json` and finalizes `CHANGELOG.md`.
-2. Publishes an immutable semver tag (`v1.2.3`).
-3. Moves the matching major tag (`v1`) to the new release so `@v1` always resolves to the latest backward-compatible version.
+2. Publishes an immutable semver tag (`v4.1.2`).
+3. Moves the matching major tag (`v4`) to the new release so `@v4` always resolves to the latest backward-compatible version.
 
-Run a release with `pnpm release` (patch), `pnpm release:minor`, or `pnpm release:major`. A `major` bump introduces a new major tag (`v2`, …); only then should consumers update their pinned ref.
+Run a release with `pnpm release` (patch), `pnpm release:minor`, or `pnpm release:major`. A `major` bump introduces a new major tag (`v5`, …); only then should consumers update their pinned ref.

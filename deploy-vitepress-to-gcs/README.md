@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.source_ref || github.ref }}
-      - uses: avagate/actions/deploy-vitepress-to-gcs@v1
+      - uses: avagate/actions/deploy-vitepress-to-gcs@v4
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 ```
@@ -45,7 +45,7 @@ All inputs are optional.
 - **`site_url`** — Public URL of the deployed site, e.g. `https://docs.avagate.dev/coreauth/`. Also written to the job summary and logs.
 
 ```yaml
-- uses: avagate/actions/deploy-vitepress-to-gcs@v1
+- uses: avagate/actions/deploy-vitepress-to-gcs@v4
   id: docs
   env:
     GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
@@ -67,7 +67,7 @@ After upload, the action runs [`build-projects-manifest`](../build-projects-mani
 ## Example with overrides
 
 ```yaml
-- uses: avagate/actions/deploy-vitepress-to-gcs@v1
+- uses: avagate/actions/deploy-vitepress-to-gcs@v4
   with:
     gcs_folder: legacy-site-name
     build_command: pnpm --filter docs build
@@ -78,4 +78,4 @@ After upload, the action runs [`build-projects-manifest`](../build-projects-mani
 
 ## Versioning
 
-Pin to an immutable release ref, e.g. `avagate/actions/deploy-vitepress-to-gcs@v1`. Tag new major versions (`v2`, …) for breaking changes; prefer new tags over moving an existing tag.
+Pin to the moving major tag, e.g. `avagate/actions/deploy-vitepress-to-gcs@v4`. The `Release` workflow publishes an immutable semver tag (`v4.1.2`) on each release and moves the matching major tag (`v4`) to it, so `@v4` always resolves to the latest backward-compatible release. A new major tag (`v5`, …) is introduced only for breaking changes. See the [repo-wide versioning notes](../README.md#versioning).
