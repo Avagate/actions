@@ -13,8 +13,8 @@
 #
 # Override gcs_bucket or site_base_url for non-default environments.
 #
-# External docs sites (not deployed to GCS) are configured in the action's
-# bundled custom-manifests.json in avagate/actions, not in this repo.
+# External docs sites (hosted outside this bucket) can be listed by uploading
+# gs://<bucket>/sites/<slug>/manifest.json directly to GCS.
 #
 # Manual run from the repo root:
 #

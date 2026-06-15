@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Remove support for custom manifests by deleting custom-manifests.json and related references in action.yml and build-projects-manifest.sh. Update README and workflow-template.yaml to reflect changes in external project configuration.. (`a578eb6`)
+
 ## 4.0.2 - 2026-06-15
 
 - Update references to deploy-vitepress-to-gcs action to v4 and clarify versioning strategy in documentation. Ensure all README files reflect the new major tag and its implications for consumers.. (`c5d5925`)

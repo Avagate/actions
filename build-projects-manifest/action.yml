@@ -42,4 +42,3 @@ runs:
       env:
         DOCS_BASE: ${{ inputs.site_base_url }}
         CACHE_CONTROL: ${{ inputs.cache_control }}
-        CUSTOM_MANIFESTS_PATH: ${{ github.action_path }}/custom-manifests.json
