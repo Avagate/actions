@@ -14,8 +14,9 @@ Use:
 git fetch origin && git pull origin main
 ```
 
-Or rely on the editor pull control with `"git.fetchTags": false` (set in
-`.vscode/settings.json` for this workspace).
+Or rely on the editor's pull/fetch controls — `.vscode/settings.json` sets
+`"git.pullTags": false` and `"git.fetchTags": false` for this workspace so the
+IDE never adds `--tags` to pull/fetch.
 
 ## Changelog
 

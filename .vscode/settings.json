@@ -1,3 +1,4 @@
 {
-  "git.fetchTags": false
+  "git.fetchTags": false,
+  "git.pullTags": false
 }
