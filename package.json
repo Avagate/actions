@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prepare": "git config --local core.hooksPath .githooks 2>/dev/null || true",
+    "prepare": "git config --local core.hooksPath .githooks 2>/dev/null || true; git config --local remote.origin.tagOpt --no-tags 2>/dev/null || true; git config --local --get-all remote.origin.fetch 2>/dev/null | grep -q 'refs/tags/v\\*' || git config --local --add remote.origin.fetch '+refs/tags/v*:refs/tags/v*' 2>/dev/null || true",
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "gh workflow run Release --ref main -f release_type=patch",
     "release:patch": "gh workflow run Release --ref main -f release_type=patch",

@@ -1,3 +1,22 @@
+## Pulling changes
+
+Releases force-move major tags (`v4`, …) to the latest semver on each release.
+Do **not** use `git pull --tags` — Git refuses to overwrite the stale local tag.
+
+After `pnpm install`, the `prepare` script configures this clone to:
+
+- skip automatic tag fetch on pull (`remote.origin.tagOpt = --no-tags`)
+- force-update `v*` tags on `git fetch` (`+refs/tags/v*:refs/tags/v*`)
+
+Use:
+
+```bash
+git fetch origin && git pull origin main
+```
+
+Or rely on the editor pull control with `"git.fetchTags": false` (set in
+`.vscode/settings.json` for this workspace).
+
 ## Changelog
 
 `CHANGELOG.md` is kept up to date automatically by the `post-commit` hook in

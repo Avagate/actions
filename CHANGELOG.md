@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- docs(agents): add instructions for pulling changes and update prepare script in package.json to configure tag fetching. (`3663867`)
+
 ## 4.0.3 - 2026-06-15
 
 - Remove support for custom manifests by deleting custom-manifests.json and related references in action.yml and build-projects-manifest.sh. Update README and workflow-template.yaml to reflect changes in external project configuration.. (`a578eb6`)
