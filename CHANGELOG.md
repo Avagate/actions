@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.0.3 - 2026-06-15
+
 - Remove support for custom manifests by deleting custom-manifests.json and related references in action.yml and build-projects-manifest.sh. Update README and workflow-template.yaml to reflect changes in external project configuration.. (`a578eb6`)
 
 ## 4.0.2 - 2026-06-15
