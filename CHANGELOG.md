@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 4.0.4 - 2026-06-15
+
 - docs(agents): add instructions for pulling changes and update prepare script in package.json to configure tag fetching. (`3663867`)
 
 ## 4.0.3 - 2026-06-15
