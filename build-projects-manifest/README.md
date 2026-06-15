@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: avagate/actions/build-projects-manifest@v2
+      - uses: avagate/actions/build-projects-manifest@v4
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 ```
@@ -65,7 +65,7 @@ To add an external project, edit and commit `custom-manifests.json` in `avagate/
 ## Example with overrides
 
 ```yaml
-- uses: avagate/actions/build-projects-manifest@v2
+- uses: avagate/actions/build-projects-manifest@v4
   with:
     gcs_bucket: docs-staging-avagate-dev
     site_base_url: https://docs-staging.avagate.dev
@@ -76,4 +76,4 @@ To add an external project, edit and commit `custom-manifests.json` in `avagate/
 
 ## Versioning
 
-Pin to an immutable release ref, e.g. `avagate/actions/build-projects-manifest@v2`. Tag new major versions (`v3`, …) for breaking changes; prefer new tags over moving an existing tag.
+Pin to the moving major tag, e.g. `avagate/actions/build-projects-manifest@v4`. The `Release` workflow publishes an immutable semver tag (`v1.2.3`) on each release and moves the matching major tag (`v1`) to it, so `@v1` always resolves to the latest backward-compatible release. A new major tag (`v2`, …) is introduced only for breaking changes.

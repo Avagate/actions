@@ -56,6 +56,9 @@ while IFS= read -r manifest_path; do
 done < <(gcloud storage ls "${BUCKET}/*/manifest.json" 2>/dev/null || true)
 
 if [[ -f "$CUSTOM_MANIFESTS_PATH" ]]; then
+  echo "::group::custom-manifests.json (${CUSTOM_MANIFESTS_PATH})" >&2
+  cat "$CUSTOM_MANIFESTS_PATH" >&2 || true
+  echo "::endgroup::" >&2
   if ! custom_json="$(jq -c 'if type != "array" then error("not an array") else . end' "$CUSTOM_MANIFESTS_PATH" 2>/dev/null)"; then
     echo "warning: invalid custom-manifests.json" >&2
   else
@@ -98,6 +101,8 @@ if [[ -f "$CUSTOM_MANIFESTS_PATH" ]]; then
       existing_names="$(jq -c --arg n "$name" '. + [$n]' <<< "$existing_names")"
     done < <(jq -c '.[]' <<< "$custom_json")
   fi
+else
+  echo "no custom-manifests.json found at ${CUSTOM_MANIFESTS_PATH}" >&2
 fi
 
 if [[ ! -s "$TMP_ENTRIES" ]]; then

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Update README and release workflow for versioning strategy. (`5afb1b1`)
+
 ## 1.0.1 - 2026-06-14
 
 - Update build-projects-manifest workflow to include checkout step. (`8db5175`)
