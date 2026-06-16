@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- docs(README): remove outdated adoption instructions for new repositories. (`acd4d38`)
 - docs(agents): clarify IDE settings for tag fetching in VSCode and update configuration in settings.json. (`e0f024f`)
 
 ## 4.0.4 - 2026-06-15
